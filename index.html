@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    
     <title>American Express</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -11,7 +16,6 @@
         
         body { background-color: var(--ax-dark); font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; -webkit-tap-highlight-color: transparent; }
 
-        /* Splash Screen Style 2 */
         #splash { 
             position: fixed; inset: 0; background: var(--ax-dark); 
             z-index: 10000; display: flex; align-items: center; justify-content: center;
@@ -20,43 +24,29 @@
         .splash-box { border: 4px solid white; padding: 8px; }
         .splash-text { color: white; font-weight: 900; font-size: 1.25rem; translate: 0.2em; letter-spacing: 0.2em; text-transform: uppercase; }
 
-        /* Pages */
-        .page { display: none; height: 100vh; width: 100vw; background: var(--ax-gray); position: absolute; top: 0; left: 0; padding-top: 100px; padding-bottom: 100px; overflow-y: auto; }
+        .page { display: none; height: 100vh; width: 100vw; background: var(--ax-gray); position: absolute; top: 0; left: 0; padding-top: 100px; padding-bottom: 110px; overflow-y: auto; }
         .page.active { display: block; animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Clavier Statique Centré */
         .key-grid { display: grid; grid-template-columns: repeat(3, 80px); gap: 15px; justify-content: center; }
         .key { height: 80px; width: 80px; border-radius: 50%; background: #ffffff; border: 1px solid #e5e7eb; font-size: 28px; display: flex; align-items: center; justify-content: center; color: var(--ax-dark); }
         .key:active { background: #e5e7eb; transform: scale(0.95); }
 
-        /* NOUVELLE Carte Platinum Argentée (IMAGE CORRIGÉE) */
         .plat-card-new {
-            background-image: url('https://i.imgur.com/LrJhW8i.png'); /* URL directe de l'image */
-            background-size: contain; /* L'image s'adapte sans être déformée */
-            background-position: center;
-            background-repeat: no-repeat; /* Évite la répétition si le cadre est plus grand */
-            border-radius: 14px;
-            height: 200px;
-            width: 100%;
-            /* Pas de background-color nécessaire car 'contain' centre l'image */
-            position: relative;
-            overflow: hidden;
-            /* Une légère ombre pour la profondeur */
+            background-image: url('https://i.imgur.com/LrJhW8i.png');
+            background-size: contain; background-position: center; background-repeat: no-repeat;
+            border-radius: 14px; height: 200px; width: 100%; position: relative; overflow: hidden;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
         }
         
-        /* Effet de brillance adapté */
         .plat-card-new::after {
             content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
             transform: rotate(45deg); animation: shine 8s infinite;
-            border-radius: 14px; /* Pour suivre les bords de l'image */
         }
         @keyframes shine { 0% { transform: translateX(-100%) rotate(45deg); } 100% { transform: translateX(100%) rotate(45deg); } }
 
-        /* Bottom Nav */
-        .nav { position: fixed; bottom: 0; width: 100%; height: 90px; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; items-center; z-index: 9000; padding-bottom: env(safe-area-inset-bottom); }
+        .nav { position: fixed; bottom: 0; width: 100%; height: 90px; background: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; align-items: center; z-index: 9000; padding-bottom: env(safe-area-inset-bottom); }
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #8e8e93; font-size: 10px; font-weight: 700; cursor: pointer; }
         .nav-item.active { color: var(--ax-blue); border-top: 3px solid var(--ax-blue); padding-top: 2px; }
 
@@ -73,7 +63,7 @@
 
 <div id="login" class="hidden fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center">
     <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" width="55" class="mb-12">
-    <h2 class="text-xl font-bold text-[#00175a] mb-2">Bonjour, Hadi</h2>
+    <h2 id="login-welcome" class="text-xl font-bold text-[#00175a] mb-2">Bonjour, Hadi</h2>
     <p class="text-xs text-gray-400 mb-12 uppercase tracking-[0.2em]">Code d'accès</p>
     
     <div id="dots" class="flex gap-4 mb-16">
@@ -98,7 +88,7 @@
     <div class="fixed top-0 w-full bg-white/95 backdrop-blur-md px-6 pt-12 pb-4 flex justify-between items-center z-[8000] border-b border-gray-100">
         <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" width="35" onclick="adm()">
         <div class="text-right">
-            <p id="ui-pts" class="text-blue-600 font-bold text-sm">642 900</p>
+            <p id="ui-pts" class="text-blue-600 font-bold text-sm">0</p>
             <p class="text-[8px] text-gray-400 font-black">POINTS</p>
         </div>
     </div>
@@ -106,27 +96,27 @@
     <div id="p-home" class="page active px-6">
         <div class="py-4">
             <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">The Platinum Card®</p>
-            <div class="plat-card-new p-6 flex flex-col justify-end">
-                <p class="text-[8px] font-medium text-black opacity-60"> </p>
-            </div>
+            <div class="plat-card-new p-6 flex flex-col justify-end"></div>
         </div>
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
             <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Solde actuel</p>
-            <h1 id="ui-bal" class="text-4xl font-bold tracking-tighter">23 635,93 €</h1>
+            <h1 id="ui-bal" class="text-4xl font-bold tracking-tighter">0,00 €</h1>
             <button class="w-full h-12 bg-[#006fcf] text-white rounded-lg mt-6 text-xs font-bold uppercase tracking-[0.1em]">Payer la facture</button>
         </div>
 
         <h3 class="text-[10px] font-bold text-gray-400 uppercase mb-3 px-1">Activité récente</h3>
-        <div class="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50 overflow-hidden mb-6">
-            <div class="p-5 flex justify-between items-center active:bg-gray-50" onclick="nav('tx')">
-                <div class="flex gap-4">
-                    <div class="w-11 h-11 bg-black text-white rounded-full flex items-center justify-center font-bold">U</div>
-                    <div><p class="text-[14px] font-bold">UBER.COM</p><p class="text-[11px] text-gray-400">Hier</p></div>
-                </div>
-                <span class="text-sm font-bold">- 42,90 €</span>
+        <div id="tx-list" class="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50 overflow-hidden mb-6">
             </div>
+    </div>
+
+    <div id="p-tx" class="page z-[9500] bg-white pt-12 px-6 hidden">
+        <div class="flex items-center text-blue-600 font-bold mb-12" onclick="nav('home')">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+            <span class="ml-2">Retour</span>
         </div>
+        <div class="text-center" id="tx-detail-content">
+            </div>
     </div>
 
     <div id="p-off" class="page px-6">
@@ -153,23 +143,6 @@
         <button class="w-full p-5 bg-white text-red-600 font-bold rounded-2xl border border-gray-100" onclick="location.reload()">Déconnexion</button>
     </div>
 
-    <div id="p-tx" class="page z-[9500] bg-white pt-12 px-6 hidden">
-        <div class="flex items-center text-blue-600 font-bold mb-12" onclick="nav('home')">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
-            <span class="ml-2">Retour</span>
-        </div>
-        <div class="text-center">
-            <div class="w-24 h-24 bg-black text-white rounded-full flex items-center justify-center text-4xl font-bold mx-auto mb-6">U</div>
-            <h3 class="text-xl font-bold">Uber.com</h3>
-            <p class="text-5xl font-black my-10 tracking-tighter">42,90 €</p>
-            <div class="bg-gray-50 rounded-2xl p-6 space-y-5 text-left">
-                <div class="flex justify-between text-xs"><span>STATUT</span><span class="text-green-600 font-bold">APPROUVÉ</span></div>
-                <div class="flex justify-between text-xs"><span>DATE</span><span class="font-bold">27 FÉV. 2026</span></div>
-                <div class="flex justify-between text-xs"><span>POINTS GAGNÉS</span><span class="text-blue-600 font-bold">+43 pts</span></div>
-            </div>
-        </div>
-    </div>
-
     <div class="nav">
         <div class="nav-item active" id="n-home" onclick="nav('home')">
             <svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>ACCUEIL</span>
@@ -183,20 +156,33 @@
     </div>
 </div>
 
-<div id="adm" class="hidden fixed inset-0 bg-white z-[10000] p-10">
+<div id="adm" class="hidden fixed inset-0 bg-white z-[10000] p-10 overflow-y-auto">
     <h2 class="text-2xl font-bold mb-8">Master Config</h2>
     <div class="space-y-4">
-        <input id="in-n" type="text" placeholder="Hadi Shaker" class="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold">
-        <input id="in-b" type="number" placeholder="12450" class="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold">
-        <input id="in-p" type="text" placeholder="642 900" class="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold">
-        <button onclick="sv()" class="w-full bg-blue-600 text-white p-5 rounded-xl font-bold shadow-lg">Enregistrer</button>
-        <button onclick="adm()" class="w-full mt-4 text-xs font-bold text-gray-400 uppercase">Fermer</button>
+        <p class="text-[10px] font-bold text-gray-400 uppercase">Infos Profil</p>
+        <input id="in-n" type="text" placeholder="Nom d'utilisateur" class="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold">
+        <input id="in-b" type="number" placeholder="Solde total (ex: 23635)" class="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold">
+        <input id="in-p" type="text" placeholder="Points (ex: 642 900)" class="w-full p-4 bg-gray-50 rounded-xl outline-none font-bold">
+        
+        <hr class="my-6">
+        <p class="text-[10px] font-bold text-gray-400 uppercase">Ajouter une Facture</p>
+        <input id="f-name" type="text" placeholder="Nom du marchand (ex: Apple)" class="w-full p-4 bg-gray-50 rounded-xl outline-none">
+        <input id="f-price" type="number" placeholder="Montant (ex: 42.90)" class="w-full p-4 bg-gray-50 rounded-xl outline-none">
+        <input id="f-date" type="text" placeholder="Date (ex: Hier ou 27 FÉV.)" class="w-full p-4 bg-gray-50 rounded-xl outline-none">
+        
+        <button onclick="addFacture()" class="w-full bg-black text-white p-3 rounded-xl font-bold text-sm">Ajouter la facture</button>
+        <button onclick="clearData()" class="w-full text-red-500 text-xs font-bold pt-4">Réinitialiser tout</button>
+        <button onclick="sv()" class="w-full bg-blue-600 text-white p-5 rounded-xl font-bold shadow-lg">Enregistrer & Fermer</button>
+        <button onclick="adm()" class="w-full mt-4 text-xs font-bold text-gray-400 uppercase">Annuler</button>
     </div>
 </div>
 
 <script>
     let code = "";
-    
+    let transactions = JSON.parse(localStorage.getItem('ax_tx')) || [
+        { name: "UBER.COM", price: 42.90, date: "Hier" }
+    ];
+
     window.onload = () => {
         setTimeout(() => {
             const s = document.getElementById('splash');
@@ -231,7 +217,6 @@
 
     function nav(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById('p-'+id).classList.remove('hidden');
         document.getElementById('p-'+id).classList.add('active');
 
@@ -242,6 +227,21 @@
 
     function adm() { document.getElementById('adm').classList.toggle('hidden'); }
 
+    function addFacture() {
+        const name = document.getElementById('f-name').value;
+        const price = document.getElementById('f-price').value;
+        const date = document.getElementById('f-date').value;
+
+        if(name && price) {
+            transactions.unshift({ name: name.toUpperCase(), price: parseFloat(price), date: date || "Aujourd'hui" });
+            localStorage.setItem('ax_tx', JSON.stringify(transactions));
+            document.getElementById('f-name').value = "";
+            document.getElementById('f-price').value = "";
+            document.getElementById('f-date').value = "";
+            alert("Facture ajoutée !");
+        }
+    }
+
     function sv() {
         if(document.getElementById('in-n').value) localStorage.setItem('ax_n', document.getElementById('in-n').value);
         if(document.getElementById('in-b').value) localStorage.setItem('ax_b', document.getElementById('in-b').value);
@@ -249,13 +249,53 @@
         refresh(); adm();
     }
 
+    function clearData() {
+        if(confirm("Tout effacer ?")) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
     function refresh() {
-        const n = localStorage.getItem('ax_n') || "Hadi Shaker";
-        const b = localStorage.getItem('ax_b') || "12450";
+        const n = localStorage.getItem('ax_n') || "Hadi";
+        const b = localStorage.getItem('ax_b') || "23635.93";
         const p = localStorage.getItem('ax_p') || "642 900";
-        if(document.getElementById('ui-name')) document.getElementById('ui-name').innerText = n.toUpperCase();
-        if(document.getElementById('ui-bal')) document.getElementById('ui-bal').innerText = parseFloat(b).toLocaleString('fr-FR', {minimumFractionDigits: 2}) + " €";
-        if(document.getElementById('ui-pts')) document.getElementById('ui-pts').innerText = p;
+        
+        document.getElementById('login-welcome').innerText = "Bonjour, " + n;
+        document.getElementById('ui-bal').innerText = parseFloat(b).toLocaleString('fr-FR', {minimumFractionDigits: 2}) + " €";
+        document.getElementById('ui-pts').innerText = p;
+
+        // Render transactions
+        const list = document.getElementById('tx-list');
+        list.innerHTML = "";
+        transactions.forEach((t, index) => {
+            const item = document.createElement('div');
+            item.className = "p-5 flex justify-between items-center active:bg-gray-50";
+            item.onclick = () => showDetail(t);
+            item.innerHTML = `
+                <div class="flex gap-4">
+                    <div class="w-11 h-11 bg-black text-white rounded-full flex items-center justify-center font-bold">${t.name[0]}</div>
+                    <div><p class="text-[14px] font-bold">${t.name}</p><p class="text-[11px] text-gray-400">${t.date}</p></div>
+                </div>
+                <span class="text-sm font-bold">- ${t.price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €</span>
+            `;
+            list.appendChild(item);
+        });
+    }
+
+    function showDetail(t) {
+        const content = document.getElementById('tx-detail-content');
+        content.innerHTML = `
+            <div class="w-24 h-24 bg-black text-white rounded-full flex items-center justify-center text-4xl font-bold mx-auto mb-6">${t.name[0]}</div>
+            <h3 class="text-xl font-bold">${t.name}</h3>
+            <p class="text-5xl font-black my-10 tracking-tighter">${t.price.toLocaleString('fr-FR', {minimumFractionDigits: 2})} €</p>
+            <div class="bg-gray-50 rounded-2xl p-6 space-y-5 text-left">
+                <div class="flex justify-between text-xs"><span>STATUT</span><span class="text-green-600 font-bold">APPROUVÉ</span></div>
+                <div class="flex justify-between text-xs"><span>DATE</span><span class="font-bold">${t.date.toUpperCase()} 2026</span></div>
+                <div class="flex justify-between text-xs"><span>POINTS GAGNÉS</span><span class="text-blue-600 font-bold">+${Math.round(t.price)} pts</span></div>
+            </div>
+        `;
+        nav('tx');
     }
 </script>
 </body>
