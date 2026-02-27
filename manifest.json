@@ -1,9 +1,1 @@
-{
-  "name": "Amex App",
-  "short_name": "Amex",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#00175a",
-  "theme_color": "#00175a",
-  "description": "Mon application American Express"
-}
+
